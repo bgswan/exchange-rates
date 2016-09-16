@@ -53,6 +53,14 @@ module Exchange
         end
       end
 
+      def test_fetch_yields_all_rates
+        rate_data = []
+        Net::HTTP.stub :get_response, valid_response do
+          EuropeanCentralBankRates.fetch{|rate| rate_data << rate[:currency]}
+        end
+        assert_equal ["AUD"], rate_data
+      end
+
       private
 
       def valid_response

@@ -29,6 +29,15 @@ module Exchange
     class EuropeanCentralBankRates
       include REXML::SAX2Listener
 
+      def self.fetch
+        rates = new.parse(FeedData.get)
+        if block_given? 
+          rates.all.each do |rate|
+            yield rate
+          end
+        end
+      end
+
       def initialize(data=nil)
         @data = data
       end
