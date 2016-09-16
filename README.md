@@ -37,6 +37,13 @@ By default the rates are provided by 90­day European Central Bank (ECB) feed, h
 The rate source can be configured by supplying an object that responds to the `lookup(date, currency_code)` method and configured as follows:
 
 ```ruby
+class MyRateSource
+  
+  def self.lookup(date, ccy)
+  	# implement lookup
+  end
+end
+
 Exchange::Rates.configure |config| do
   config.rate_source = MyRateSource
 end
