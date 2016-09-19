@@ -39,6 +39,10 @@ module Exchange
       def test_lookup_with_date
         assert_equal 1.1218, @rates.lookup(Date.parse("2016-09-14"), "USD")
       end
+
+      def test_list_currencies
+        assert_equal ["GBP", "USD"], @rates.currencies
+      end
     end
   end
 end

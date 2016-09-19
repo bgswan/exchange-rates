@@ -10,6 +10,10 @@ module Exchange
         new(::Exchange::Rates.configuration.rate_source).at(date, base_ccy, counter_ccy)
       end
 
+      def self.currencies
+        ::Exchange::Rates.configuration.rate_source.currencies
+      end
+
       def initialize(rate_source)
         @rates = rate_source
       end

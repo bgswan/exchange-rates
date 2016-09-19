@@ -21,6 +21,10 @@ module Exchange
           ExchangeRate.at(Date.parse("2016-01-01"), "GBP", "USD")          
         end
       end
+
+      def test_list_currencies
+        assert_equal ["GBP", "USD"], ExchangeRate.currencies
+      end
     end
   end
 end
