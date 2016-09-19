@@ -4,12 +4,11 @@ require 'date'
 module Exchange
   module Rates
     class ExchangeRateTest < Minitest::Test
-      RATE_DATA = [{date: "2016-09-14", currency: "USD", rate: "3.0"},
-                   {date: "2016-09-14", currency: "GBP", rate: "2.0"}]
+      FEED_XML = File.join(File.dirname(__FILE__), "../fixtures/feed_data.xml")
 
       def setup
         ::Exchange::Rates.configure do |config|
-          config.rate_source = EuropeanCentralBankRates.new(RATE_DATA)
+          config.rate_source = EuropeanCentralBankRates.parse(File.read(FEED_XML))
         end
       end
 

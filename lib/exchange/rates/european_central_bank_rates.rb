@@ -1,45 +1,13 @@
 require 'rexml/parsers/sax2parser'
 require 'rexml/sax2listener'
-require 'net/http'
 
 module Exchange
   module Rates
-    class FeedData
-      def self.get
-        new("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml").get
-      end
-
-      def initialize(feed_url)
-        @url = URI(feed_url)
-      end
-
-      def get
-        response = Net::HTTP.get_response(@url)
-        case response
-        when Net::HTTPSuccess
-          response.body    
-        else
-          response.value # raises HTTP error as defined by the response type 
-        end
-      rescue Errno::ECONNREFUSED
-        raise RuntimeError, "Unable to connect to feed endpoint [#{@url}]"
-      end
-    end
-
     class EuropeanCentralBankRates
       include REXML::SAX2Listener
 
-      def self.fetch
-        rates = new.parse(FeedData.get)
-        if block_given? 
-          rates.all.each do |rate|
-            yield rate
-          end
-        end
-      end
-
-      def initialize(data=nil)
-        @data = data
+      def self.parse(xml_data)
+        new.parse(xml_data)
       end
 
       def parse(xml_data)
@@ -53,16 +21,9 @@ module Exchange
       end
 
       def lookup(date, currency)        
-        rate = all.find{|r| r[:date] == convert_date(date) && r[:currency] == currency}
+        rate = @data.find{|r| r[:date] == convert_date(date) && r[:currency] == currency}
         raise NoRateError, "No rate for #{currency} at #{date}" if rate.nil?
         Float(rate[:rate])
-      end
-
-      def all
-        if @data.nil?
-          parse(FeedData.get)
-        end
-        @data
       end
 
       # XML parser methods

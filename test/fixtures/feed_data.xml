@@ -1,0 +1,8 @@
+<gesmes:Envelope xmlns:gesmes="http://www.gesmes.org/xml/2002-08-01">
+	<Cube>
+		<Cube time="2016-09-14">
+			<Cube currency="GBP" rate="2"/>
+			<Cube currency="USD" rate="3"/>
+		</Cube>
+	</Cube>
+<gesmes:Envelope>
